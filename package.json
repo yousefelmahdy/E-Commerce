@@ -1,5 +1,5 @@
 {
-  "name": "E-Commerce",
+  "name": "ecommerce",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/yousefelmahdy/E-Commerce#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.3.4",

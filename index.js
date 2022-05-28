@@ -3,16 +3,17 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const userRouter = require("./routes/user");
+const authRouter = require("./routes/auth");
 
 dotenv.config();
+app.use(express.json());
+app.use("/api/users", userRouter)
+app.use("/api/auth", authRouter)
 
-mongoose.connect('mongodb://localhost/Ecommerce')
+mongoose.connect('mongodb://localhost:27017/ecommerce')
         .then(()=>console.log('connected successfully'))
         .catch(err=>console.log('could not connect....'));
 
-app.use(express.json());
-app.use("/api/users", userRouter)
-
-const port = process.env.Port || 3000;
+const port = 4000;
 app.listen(port, () => console.log(`lisening on port ${port}`));
 
