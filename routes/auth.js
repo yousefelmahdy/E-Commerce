@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const {passwordValidator, emailValidator} = require("../validation")
 
 // Register
@@ -8,10 +9,10 @@ router.post("/register", async (req,res)=>{
 
     // Check if valid email
     const result = emailValidator.validate(req.body.email);
-    if (result.error) res.status(403).send("Invalid email");
+    if (result.error) return res.status(403).send("Invalid email");
     // Check if valid password
     const {error} = passwordValidator.validate(req.body.password);
-    if (error) res.status(403).send("Invalid Password");
+    if (error) return res.status(403).send("Invalid Password");
 
     let user = await User.findOne({email: req.body.email});
     if (user) {
@@ -30,6 +31,11 @@ router.post("/register", async (req,res)=>{
         password:hashPassword,
     });
 
+    const acessToken = jwt.sign({
+        _id : newUser._id,
+        isadmin : newUser.isadmin,
+    }, process.env.TOKEN_SECRET,{expiresIn:"7d"});
+
 try {
     await newUser.save();
     const {password, ...others} = newUser._doc;
@@ -46,17 +52,18 @@ router.post("/login", async(req,res)=>{
 
     // Check if valid email
     const result = emailValidator.validate(req.body.email);
-    if (result.error) res.status(403).send("Invalid email");
+    if (result.error) return res.status(403).send("Invalid email");
     // Check if valid password
     const {error} = passwordValidator.validate(req.body.password);
-    if (error) res.status(403).send("Invalid Password");
+    if (error) return res.status(403).send("Invalid Password");
 
     // Check Valid email
     const user = await User.findOne({email: req.body.email});
-    if (!user) res.status(400).json("Incorrect Email");
+    if (!user) return res.status(400).json("Incorrect Email");
+    
     // Check Valid password
     const validPass = await bcrypt.compare(req.body.password, user.password);
-    if (!validPass) res.status(400).json("Incorrect Password");
+    if (!validPass) return res.status(400).json("Incorrect Password");
 
     res.status(201).send("Login successfull")
 
