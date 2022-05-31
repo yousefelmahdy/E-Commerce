@@ -31,11 +31,6 @@ router.post("/register", async (req,res)=>{
         password:hashPassword,
     });
 
-    const acessToken = jwt.sign({
-        _id : newUser._id,
-        isadmin : newUser.isadmin,
-    }, process.env.TOKEN_SECRET,{expiresIn:"7d"});
-
 try {
     await newUser.save();
     const {password, ...others} = newUser._doc;
@@ -65,7 +60,14 @@ router.post("/login", async(req,res)=>{
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if (!validPass) return res.status(400).json("Incorrect Password");
 
-    res.status(201).send("Login successfull")
+    const acessToken = jwt.sign({
+        _id : user._id,
+        isadmin : user.isadmin,
+    }, process.env.TOKEN_SECRET,{expiresIn:"7d"});
+
+    const {password, ...others} = user._doc;
+
+    res.status(201).json({...others, acessToken})
 
 });
 
