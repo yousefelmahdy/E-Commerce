@@ -3,11 +3,13 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const userRouter = require("./routes/user");
+const productRouter = require("./routes/product");
 const authRouter = require("./routes/auth");
 
 dotenv.config();
 app.use(express.json());
 app.use("/api/users", userRouter)
+app.use("/api/products", productRouter)
 app.use("/api/auth", authRouter)
 
 mongoose.connect('mongodb://localhost:27017/ecommerce')
