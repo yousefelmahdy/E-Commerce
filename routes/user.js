@@ -6,7 +6,7 @@ const { date } = require("joi");
 
 
 // UPDATE
-router.put("/:id", verifyToken, async(req, res,)=>{
+router.put("/:id", verifyToken, async(req, res)=>{
     if(!(req.user._id == req.params.id || req.user.isadmin)){
         return res.status(403).json("Access Denied!");
     }
@@ -28,7 +28,7 @@ router.put("/:id", verifyToken, async(req, res,)=>{
 
 
 //DELETE
-router.delete("/:id", verifyToken, async(req, res,)=>{
+router.delete("/:id", verifyToken, async(req, res)=>{
     if(!(req.user._id == req.params.id || req.user.isadmin)){
         return res.status(403).json("Access Denied!");
     }
@@ -43,7 +43,7 @@ router.delete("/:id", verifyToken, async(req, res,)=>{
 });
 
 //GET
-router.get("/find/:id", verifyToken, async(req, res,)=>{
+router.get("/find/:id", verifyToken, async(req, res)=>{
     if(!(req.user._id == req.params.id || req.user.isadmin)){
         return res.status(403).json("Access Denied!");
     }
@@ -59,7 +59,7 @@ router.get("/find/:id", verifyToken, async(req, res,)=>{
 });
 
 //GET ALL USERS
-router.get("/", verifyToken, async(req, res,)=>{
+router.get("/", verifyToken, async(req, res)=>{
     if(!(req.user.isadmin)){
         return res.status(403).json("Access Denied!");
     }
@@ -74,7 +74,7 @@ router.get("/", verifyToken, async(req, res,)=>{
 });
 
 //GET ALL USERS status
-router.get("/status", verifyToken, async(req, res,)=>{
+router.get("/status", verifyToken, async(req, res)=>{
     if(!(req.user.isadmin)){
         return res.status(403).json("Access Denied!");
     }

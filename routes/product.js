@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const Product = require("../models/Product");
-const bcrypt = require("bcrypt");
 const verifyToken = require("../routes/verifyToken");
-const { date } = require("joi");
 
+
+// create
 router.post("/", verifyToken, async (req, res) => {
     if(!(req.user.isadmin)){
         return res.status(403).json("Access Denied!");
@@ -20,12 +20,8 @@ router.post("/", verifyToken, async (req, res) => {
 
 
 
-
-
-
-
 // UPDATE
-router.put("/:id", verifyToken, async(req, res,)=>{
+router.put("/:id", verifyToken, async(req, res)=>{
     if(!(req.user.isadmin)){
         return res.status(403).json("Access Denied!");
     }
@@ -43,7 +39,7 @@ router.put("/:id", verifyToken, async(req, res,)=>{
 
 
 //DELETE
-router.delete("/:id", verifyToken, async(req, res,)=>{
+router.delete("/:id", verifyToken, async(req, res)=>{
     if(!(req.user.isadmin)){
         return res.status(403).json("Access Denied!");
     }
@@ -58,7 +54,7 @@ router.delete("/:id", verifyToken, async(req, res,)=>{
 });
 
 //GET
-router.get("/find/:id", async(req, res,)=>{
+router.get("/find/:id", async(req, res)=>{
 
     try {
         const product = await Product.findById(req.params.id);
@@ -70,7 +66,7 @@ router.get("/find/:id", async(req, res,)=>{
 });
 
 //GET ALL PRODUCTS
-router.get("/", async(req, res,)=>{
+router.get("/", async(req, res)=>{
     qNew = req.query.new;
     qCategory = req.query.category;
     try {
@@ -93,39 +89,6 @@ router.get("/", async(req, res,)=>{
     }
 
 });
-
-// //GET ALL USERS status
-// router.get("/status", verifyToken, async(req, res,)=>{
-//     if(!(req.user.isadmin)){
-//         return res.status(403).json("Access Denied!");
-//     }
-
-//     const date = new Date();
-//     const lastYear = new Date(date.setFullYear(date.getFullYear() -1));
-
-
-//     try {
-//         const date = await User.aggregate([
-//             {$match : {createdAt : { $gte : lastYear }}},
-//             {
-//                 $project: {
-//                     month : {$month : "$createdAt"},
-//                 },
-//             },
-//             {
-//                 $group: {
-//                     _id: "$month",
-//                     total:{ $sum : 1},
-//                 }
-//             }
-//         ]);
-//         res.status(200).json(date);
-//     } catch (error) {
-//         res.status(500).json(error);
-//     }
-
-// });
-
 
 
 module.exports = router;
